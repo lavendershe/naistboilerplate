@@ -1,0 +1,42 @@
+version: '3.7' #downgrade to 3 for the lab's server
+
+services:
+
+  ######################################################
+  ##  Deploying using Firebase this time so no need   ##
+  ######################################################
+  client:
+    container_name: "${SERVICE_IMAGE_NAME}_${SERVICE_IMAGE_VERSION}_${ADMIN_NAME}"
+    image: "sociocomnaist/${SERVICE_IMAGE_NAME}:${SERVICE_IMAGE_VERSION}"
+    restart: always
+    ports:
+        - ${CLIENT_EXPOSE_PORT}:${CLIENT_CONTAINER_PORT}
+
+#   ######################
+#   ##   Flask server   ##
+#   ######################
+  server:
+    image: 'sociocomnaist/${SERVICE_IMAGE_NAME}_server:${SERVICE_IMAGE_VERSION}'
+    container_name: "${SERVICE_IMAGE_NAME}_server_${SERVICE_IMAGE_VERSION}_${ADMIN_NAME}"
+    restart: always
+    ports:
+      - '${SERVER_EXPOSE_PORT}:${SERVER_CONTAINER_PORT}'
+
+#   #######################
+#   ##  MySQL database   ## # comment it out if you don't need a database
+#   #######################
+  mysql:
+    image: 'mysql:8'
+    # platform: linux/x86_64 # only for aoi server
+    container_name: "${SERVICE_IMAGE_NAME}_db_${ADMIN_NAME}"
+    environment:
+    - MYSQL_ROOT_HOST=${MYSQL_ROOT_HOST}
+    - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    - MYSQL_USER=${MYSQL_USER}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    - MYSQL_DATABASE=${MYSQL_DATABASE}
+    ports:
+    - ${MYSQL_EXPOSE_PORT}:${MYSQL_CONTAINER_PORT}
+    volumes:
+      - './mysql_data:/var/lib/mysql'
+

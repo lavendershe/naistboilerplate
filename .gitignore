@@ -104,3 +104,4 @@ dist
 .tern-port
 .env
 mysql_data/
+my_password.txt
