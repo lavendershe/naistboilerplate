@@ -8,8 +8,12 @@ services:
   client:
     container_name: "${SERVICE_IMAGE_NAME}_${SERVICE_IMAGE_VERSION}_${ADMIN_NAME}"
     image: "sociocomnaist/${SERVICE_IMAGE_NAME}:${SERVICE_IMAGE_VERSION}"
+
+    ## IMPORTANT BELOW: comment out when deploying in the remote server
     build:
       context: './client'
+    ## IMPORTANT ABOVE: comment out when deploying in the remote server
+    
     restart: always
     ports:
         - ${CLIENT_EXPOSE_PORT}:${CLIENT_CONTAINER_PORT}
@@ -37,15 +41,15 @@ services:
 #   ######################
 #   ##   Flask server   ##
 #   ######################
-#   server:
-#     image: "sociocomnaist/${SERVICE_IMAGE_NAME}:${SERVICE_IMAGE_VERSION}"
-#     container_name: "${SERVICE_IMAGE_NAME}_${SERVICE_IMAGE_VERSION}_${ADMIN_NAME}"
-#     restart: always
-#     ports:
-#         - ${SERVER_EXPOSE_PORT}:${SERVER_CONTAINER_PORT}
-#     # volumes: #bind your volumes in case you have configuration files you will frequently change
-#     #   - './chatbot_config/survey_V2.jsonal:/usr/src/recSys/chatbotModel/zhangmodel/survey_V2.jsonal'
+  server:
+    image: 'sociocomnaist/${SERVICE_IMAGE_NAME}_server:${SERVICE_IMAGE_VERSION}'
+    container_name: "${SERVICE_IMAGE_NAME}_server_${SERVICE_IMAGE_VERSION}_${ADMIN_NAME}"
 
-# volumes:
-#   mysql_data:
-  # chatbot_config:
+    ## IMPORTANT BELOW: comment out when deploying in the remote server
+    build:
+      context: './server'
+    ## IMPORTANT ABOVE: comment out when deploying in the remote server
+    
+    restart: always
+    ports:
+      - '${SERVER_EXPOSE_PORT}:${SERVER_CONTAINER_PORT}'
