@@ -58,3 +58,5 @@ buildserver:
 runmysql:
 	sudo docker-compose up mysql
 
+fixdockerconfig:
+	rm ~/.docker/config.json
